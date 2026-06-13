@@ -38,21 +38,67 @@ export default function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link
-            to="/login"
-            className="hidden sm:inline-flex px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-slate-100 transition"
-          >
-            Login
-          </Link>
-          <Link
-            to="/register"
-            className="hidden sm:inline-flex px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-semibold shadow-lg shadow-amber-400/25 hover:shadow-amber-400/40 transition"
-          >
-            Register
-          </Link>
+          <HeaderAuthButtons />
         </div>
       </div>
     </header>
   )
 }
+
+function HeaderAuthButtons() {
+  const token = localStorage.getItem('accessToken')
+  const [me, setMe] = React.useState<{ id: string; name: string; email: string; role: string } | null>(null)
+
+  React.useEffect(() => {
+    let active = true
+    async function run() {
+      if (!token) return
+      try {
+        const r = await fetch('http://127.0.0.1:5000/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (!r.ok) return
+        const data = await r.json()
+        if (!active) return
+        setMe(data?.user || null)
+      } catch {
+        // ignore
+      }
+    }
+    run()
+    return () => {
+      active = false
+    }
+  }, [token])
+
+  if (!me) {
+    return (
+      <>
+        <Link
+          to="/login"
+          className="hidden sm:inline-flex px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-slate-100 transition"
+        >
+          Login
+        </Link>
+        <Link
+          to="/register"
+          className="hidden sm:inline-flex px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-semibold shadow-lg shadow-amber-400/25 hover:shadow-amber-400/40 transition"
+        >
+          Register
+        </Link>
+      </>
+    )
+  }
+
+  return (
+    <Link
+      to="/dashboard"
+      className="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 transition"
+      aria-label="Profile"
+    >
+      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 via-yellow-300 to-amber-200 shadow-lg shadow-amber-500/20" />
+    </Link>
+  )
+}
+
 

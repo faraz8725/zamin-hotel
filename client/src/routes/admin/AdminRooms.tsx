@@ -88,16 +88,19 @@ export default function AdminRooms() {
         amenities: '',
         isActive: true,
       })
-    } catch {
-      // ignore
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to create room'
+      alert(msg)
     } finally {
       setBusy(false)
     }
+
   }
 
   async function removeRoom(id: string) {
     setBusy(true)
     try {
+
       await fetch(`http://127.0.0.1:5000/api/rooms/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
@@ -110,6 +113,7 @@ export default function AdminRooms() {
     } finally {
       setBusy(false)
     }
+
   }
 
   return (

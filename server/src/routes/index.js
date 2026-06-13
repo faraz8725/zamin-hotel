@@ -13,5 +13,11 @@ router.use('/bookings', bookingRoutes)
 router.use('/reviews', reviewRoutes)
 router.use('/admin', adminRoutes)
 
+import { getUploadSignature } from '../controllers/imagekit.controller.js'
+
+router.post('/imagekit/upload-signature', getUploadSignature)
+
+
 export default router
+
 

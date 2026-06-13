@@ -1,40 +1,18 @@
-# TODO - zamin-hotel2 (MERN Luxury Hotel Booking)
+# TODO
 
-## Step 1: Initialize monorepo structure
+- [x] Fix 1: Authentication UI Fix (SiteHeader)
+  - [x] Detect logged-in user by calling `GET /api/auth/me`
+  - [x] If logged in: hide Login/Register and show profile avatar/button
+  - [x] If not logged in: keep Login/Register buttons exactly as-is
 
-- [ ] Create `/client` (Vite + React + Tailwind) and `/server` (Express + Mongoose)
-- [ ] Add base scripts + environment templates
+- [x] Fix 2: Room Creation Bug
+  - [ ] Verify admin auth middleware and token flow for `POST /api/rooms`
+  - [ ] Fix backend or client request/body issues so admin can create rooms and data saves
+  - [ ] Ensure any errors aren’t silently swallowed
 
-## Step 2: Backend (production-ready)
-
-- [x] Implement Express app with CORS, JSON parsing, error handling, logging
-- [x] Add Mongo connection + Mongoose models: User, Room, Booking, Review
-- [x] Implement JWT auth middleware + role checks (admin)
-- [x] Implement REST APIs:
-  - [x] Auth: register/login/me
-  - [x] Rooms: list/detail/search (public) + CRUD (admin)
-  - [x] Bookings: create/list (user) + list all + analytics helpers (admin)
-  - [x] Reviews: add/list by room
-- [x] Seed script for rooms (optional) (GET /api/seed)
-
-## Step 3: Frontend (all required pages)
-
-- [ ] React Router setup
-- [ ] Implement pages: Home, Rooms, Room Details, Booking, About, Contact, Gallery, Login, Register, Dashboard
-- [ ] Implement responsive luxury UI with Tailwind + smooth animations
-- [ ] Implement booking form with date picker
-- [ ] Implement auth UI + protected routes
-- [ ] Implement room cards + room details views
-
-## Step 4: Admin panel
-
-- [ ] Dashboard admin UI
-- [ ] Room management (CRUD)
-- [ ] Booking management (view)
-- [ ] Analytics view (from admin endpoints)
-
-## Step 5: QA / Run instructions
-
-- [ ] Provide `.env` examples
-- [ ] Add root README with setup steps
-- [ ] Run build + start (client + server)
+- [ ] Fix 3: ImageKit Integration
+  - [ ] Add backend endpoint for ImageKit upload signature
+  - [ ] Update admin room creation UI to upload images to ImageKit and submit returned URLs
+  - [ ] Ensure uploaded ImageKit URLs are saved to `Room.imageUrls`
+  - [ ] Verify rooms display the uploaded images across pages
+- [x] Add/Update env: create a single server/.env and server/.env.example entries for ImageKit endpoints/keys

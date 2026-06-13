@@ -28,6 +28,7 @@ app.get('/health', (req, res) => res.json({ ok: true }))
 
 app.use('/api', routes)
 
+
 app.get('/api/seed', async (req, res) => {
   // Optional seed endpoint: creates a few rooms for first run
   // ADMIN not required for simplicity; you can lock it down later.
