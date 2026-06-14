@@ -18,7 +18,7 @@ export default function AdminRooms() {
   const [rooms, setRooms] = useState<Room[]>([])
   const [busy, setBusy] = useState(false)
 
-  const [form, setForm] = useState({
+const [form, setForm] = useState({
     title: '',
     slug: '',
     description: '',
@@ -28,6 +28,9 @@ export default function AdminRooms() {
     amenities: '',
     isActive: true,
   })
+
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [uploadingImages, setUploadingImages] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -48,15 +51,75 @@ export default function AdminRooms() {
     }
   }, [])
 
+async function uploadToImageKit(files: File[]): Promise<string[]> {
+    // Upload selected room images to ImageKit and return their URLs
+    // Uses server signature endpoint to generate token/signature per file.
+    const uploadedUrls: string[] = []
+
+    // ImageKit upload API (fixed endpoint)
+    const uploadUrl = 'https://upload.imagekit.io/api/v1/files/upload'
+
+    for (const file of files) {
+      const sigRes = await fetch('http://127.0.0.1:5000/api/imagekit/upload-signature', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename: file.name,
+          fileType: file.type || 'image',
+          size: file.size,
+        }),
+      })
+
+      const sigData = await sigRes.json()
+      if (!sigRes.ok) throw new Error(sigData?.message || 'Failed to get ImageKit signature')
+
+      const fd = new FormData()
+      fd.append('file', file)
+      fd.append('fileName', file.name)
+      if (sigData.folder) fd.append('folder', sigData.folder)
+      fd.append('token', sigData.token)
+      fd.append('signature', sigData.signature)
+      fd.append('expire', String(sigData.expire))
+
+      const upRes = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          // ImageKit expects token/signature/expire in multipart body
+          // Do not set Content-Type manually.
+        },
+        body: fd,
+      })
+
+      const upData = await upRes.json()
+      if (!upRes.ok) throw new Error(upData?.message || 'Image upload failed')
+
+      // ImageKit responds with `url` for uploaded file
+      if (!upData?.url) throw new Error('ImageKit did not return url')
+      uploadedUrls.push(upData.url)
+    }
+
+    return uploadedUrls
+  }
+
   async function createRoom(e: React.FormEvent) {
     e.preventDefault()
     setBusy(true)
     try {
+      let imageUrlsArr: string[] = form.imageUrls ? form.imageUrls.split(',').map((s) => s.trim()) : []
+
+      if (selectedFiles.length > 0) {
+        setUploadingImages(true)
+        const uploaded = await uploadToImageKit(selectedFiles)
+        imageUrlsArr = uploaded
+        setForm((f) => ({ ...f, imageUrls: uploaded.join(',') }))
+        setSelectedFiles([])
+      }
+
       const body = {
         title: form.title,
         slug: form.slug,
         description: form.description,
-        imageUrls: form.imageUrls ? form.imageUrls.split(',').map((s) => s.trim()) : [],
+        imageUrls: imageUrlsArr,
         pricePerNight: Number(form.pricePerNight),
         capacity: Number(form.capacity),
         amenities: form.amenities ? form.amenities.split(',').map((s) => s.trim()) : [],
@@ -91,8 +154,9 @@ export default function AdminRooms() {
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Failed to create room'
       alert(msg)
-    } finally {
+} finally {
       setBusy(false)
+      setUploadingImages(false)
     }
 
   }

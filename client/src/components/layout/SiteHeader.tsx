@@ -90,13 +90,17 @@ function HeaderAuthButtons() {
     )
   }
 
+const initial = (me?.name || me?.email || '?').trim().slice(0, 1).toUpperCase()
+
   return (
     <Link
       to="/dashboard"
       className="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 transition"
       aria-label="Profile"
     >
-      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 via-yellow-300 to-amber-200 shadow-lg shadow-amber-500/20" />
+      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 via-yellow-300 to-amber-200 shadow-lg shadow-amber-500/20 flex items-center justify-center text-slate-950 font-semibold">
+        {initial}
+      </div>
     </Link>
   )
 }

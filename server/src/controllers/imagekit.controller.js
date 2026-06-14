@@ -24,17 +24,15 @@ export async function getUploadSignature(req, res) {
     const expireAt = Date.now() + expiresInMs
     const timestamp = Math.floor(expireAt / 1000)
 
-    // Recommended by ImageKit for signature generation
-    const signaturePayload = `${publicKey}${fileType}${timestamp}`
-    const signature = crypto
-      .createHmac('sha256', privateKey)
-      .update(signaturePayload)
-      .digest('base64')
+// ImageKit browser upload signature format:
+    // signature = HMAC_SHA256(token + expire, privateKey)
+    // where expire is the UNIX timestamp (seconds)
+    const signaturePayload = `${publicKey}${timestamp}`
+    const signature = crypto.createHmac('sha256', privateKey).update(signaturePayload).digest('base64')
 
-    // Note: folder can be set by client; keep minimal.
     return res.json({
       signature,
-      expireAt: String(expireAt),
+      expire: timestamp,
       token: publicKey,
       urlEndpoint,
       folder,
