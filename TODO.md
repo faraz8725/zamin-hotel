@@ -1,18 +1,16 @@
-# TODO
+# TODO - Zamin Hotel (MERN)
 
-- [x] Fix 1: Authentication UI Fix (SiteHeader)
-  - [x] Detect logged-in user by calling `GET /api/auth/me`
-  - [x] If logged in: hide Login/Register and show profile avatar/button
-  - [x] If not logged in: keep Login/Register buttons exactly as-is
-
-- [x] Fix 2: Room Creation Bug
-  - [ ] Verify admin auth middleware and token flow for `POST /api/rooms`
-  - [ ] Fix backend or client request/body issues so admin can create rooms and data saves
-  - [ ] Ensure any errors aren’t silently swallowed
-
-- [ ] Fix 3: ImageKit Integration
-  - [ ] Add backend endpoint for ImageKit upload signature
-  - [ ] Update admin room creation UI to upload images to ImageKit and submit returned URLs
-  - [ ] Ensure uploaded ImageKit URLs are saved to `Room.imageUrls`
-  - [ ] Verify rooms display the uploaded images across pages
-- [x] Add/Update env: create a single server/.env and server/.env.example entries for ImageKit endpoints/keys
+- [x] Create backend production-ready MERN API skeleton (Express, Mongo models, auth, RBAC, validation, security middlewares)
+- [ ] Implement ImageKit integration (upload/delete/update, compression/optimization, multi-upload)
+- [ ] Implement Razorpay payments + booking/refund flow
+- [ ] Implement CMS models + routes + admin editable content APIs
+- [ ] Implement Admin dashboard endpoints (analytics, bookings, rooms, users, reviews, CMS, settings, coupons)
+- [ ] Implement Customer side features endpoints (rooms search/filter, room details, availability calendar, booking w/ coupons, profile, favorites, reviews)
+- [ ] Implement JWT auth (register/login/forgot/reset) + password hashing
+- [ ] Implement frontend Vite React app (routing, layouts, premium luxury UI with Tailwind + glassmorphism)
+- [ ] Implement state management (Context/RTK) + Axios API client + protected routes
+- [ ] Implement Admin UI (tables, forms, charts, skeleton loaders, toasts)
+- [ ] Implement Customer UI (homepage, room listing/details, booking, dashboard)
+- [ ] Add global error handling, loading states, responsive components
+- [ ] Write README (installation, env setup, deployment)
+- [ ] Run basic lint/build checks (backend start + frontend build)
