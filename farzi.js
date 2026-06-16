@@ -1,6 +1,18 @@
-0% (4/4), 46.29 KiB | 2.57 MiB/s, done.
-Total 4 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.c
-   2756ae8..79a2c45  main -> main
-PS C:\Users\DELL\Desktop\zamin-hotel2 - Copy>
+// Function to generate a random password
+function generatePassword(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+    let password = '';
+    
+    for (let i = 0; i < length; i++) {
+        // Pick a random index from the characters string
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        // Append the character to the password
+        password += characters.charAt(randomIndex);
+    }
+    
+    return password;
+}
+
+// Generate and log a 12-character password
+const newPassword = generatePassword(12);
+console.log("Your random password is: " + newPassword);
