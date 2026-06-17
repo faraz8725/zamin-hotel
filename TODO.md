@@ -14,3 +14,5 @@
 - [ ] Add global error handling, loading states, responsive components
 - [ ] Write README (installation, env setup, deployment)
 - [ ] Run basic lint/build checks (backend start + frontend build)
+
+This is created by Nawab Agha-Mr.Faraz
